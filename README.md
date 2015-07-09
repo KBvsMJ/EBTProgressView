@@ -7,4 +7,4 @@
     _progressView.progress = 0.75;
 
 #Demo演示gif效果图
-！[Image](https://github.com/KBvsMJ/EBTProgressView/blob/master/demo/1.gif)
+![Image](https://github.com/KBvsMJ/EBTProgressView/blob/master/demo/1.gif)
