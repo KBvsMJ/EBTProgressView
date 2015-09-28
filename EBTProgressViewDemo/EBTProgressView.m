@@ -5,7 +5,10 @@
 //  Created by ebaotong on 15/7/1.
 //  Copyright (c) 2015年 com.csst. All rights reserved.
 //
-
+#define UIColorFromRGB(rgbValue) [UIColor \
+colorWithRed:((float)((rgbValue & 0xFF0000) >> 16))/255.0 \
+green:((float)((rgbValue & 0xFF00) >> 8))/255.0 \
+blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
 #import "EBTProgressView.h"
 @interface EBTProgressView ()
 {
@@ -25,10 +28,44 @@
 - (void)awakeFromNib
 {
     [super awakeFromNib];
-    self.backgroundColor = UIColorFromRGB(0xdedede);
+    self.backgroundColor =  UIColorFromRGB(0xdedede);
+    self.layer.masksToBounds = YES;
+    self.layer.cornerRadius = 3.0;
+    
+    
     progressView = [[UIView alloc]init];
-    progressView.frame = CGRectMake(0, 0, 0, self.bounds.size.height);
+    progressView.layer.cornerRadius = 3.0f;
+    progressView.layer.masksToBounds = YES;
+    [progressView setBackgroundColor: self.backgroundColor];
+    progressView.translatesAutoresizingMaskIntoConstraints = NO;
     [self addSubview:progressView];
+    NSLayoutConstraint *leftConstraint = [NSLayoutConstraint
+                                          constraintWithItem:progressView
+                                          attribute:NSLayoutAttributeLeft
+                                          relatedBy:NSLayoutRelationEqual
+                                          toItem:self
+                                          attribute:NSLayoutAttributeLeft
+                                          multiplier:1 constant:0];
+    
+    
+    NSLayoutConstraint *topConstraint = [NSLayoutConstraint
+                                         constraintWithItem:progressView
+                                         attribute:NSLayoutAttributeTop
+                                         relatedBy:NSLayoutRelationEqual
+                                         toItem:self
+                                         attribute:NSLayoutAttributeTop
+                                         multiplier:1 constant:0];
+    
+    
+    
+    NSLayoutConstraint *bottomConstraint = [NSLayoutConstraint
+                                            constraintWithItem:progressView
+                                            attribute:NSLayoutAttributeBottom
+                                            relatedBy:NSLayoutRelationEqual
+                                            toItem:self
+                                            attribute:NSLayoutAttributeBottom
+                                            multiplier:1 constant:0];
+    [self addConstraints:@[leftConstraint,topConstraint,bottomConstraint]];
 }
 
 - (void)setProgress:(CGFloat)progress
@@ -45,12 +82,14 @@
     {
         _progress = 1.f;
     }
-    [UIView animateWithDuration:0.8 delay:0.1 options:UIViewAnimationOptionCurveEaseOut animations:^{
-        /**设置进度条的width宽度*/
-        CGRect newRect = progressView.frame;
-        newRect.size.width = _progress*self.bounds.size.width;
-        progressView.frame = newRect;
-      [progressView setBackgroundColor:UIColorFromRGB(0xec5d5f)];
+    [UIView animateWithDuration:0.4 delay:0 options:UIViewAnimationOptionCurveEaseOut animations:^{
+        
+        
+        [self resetWidthConstraint:_progress];
+        [progressView setBackgroundColor:UIColorFromRGB(0xE44547)];
+        
+        [self layoutIfNeeded];
+        
         
     } completion:^(BOOL finished) {
         
@@ -58,4 +97,17 @@
     }];
     
 }
+- (void)resetWidthConstraint:(CGFloat)multiplier
+{
+    
+    NSLayoutConstraint * widthConstraint = [NSLayoutConstraint
+                                            constraintWithItem:progressView
+                                            attribute:NSLayoutAttributeWidth
+                                            relatedBy:NSLayoutRelationEqual
+                                            toItem:self
+                                            attribute:NSLayoutAttributeWidth
+                                            multiplier:multiplier constant:0];
+    [self addConstraint:widthConstraint];
+}
+
 @end

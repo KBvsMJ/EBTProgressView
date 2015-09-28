@@ -18,13 +18,16 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
    
-    _progressView.progress = 0.98;
     
 }
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+- (IBAction)btnClick:(UIButton *)sender {
+    _progressView.progress = 0.98;
+
 }
 
 @end
